@@ -5,6 +5,16 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+autoload -U compinit && compinit
+
+if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+
+if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+    source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
 # Start configuration added by Zim install {{{
 #
 # User configuration sourced by interactive shells
@@ -126,13 +136,13 @@ source ${ZIM_HOME}/init.zsh
 # zsh-history-substring-search
 #
 
-zmodload -F zsh/terminfo +p:terminfo
+#zmodload -F zsh/terminfo +p:terminfo
 # Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
-for key ('^[[A' '^P' ${terminfo[kcuu1]}) bindkey ${key} history-substring-search-up
-for key ('^[[B' '^N' ${terminfo[kcud1]}) bindkey ${key} history-substring-search-down
-for key ('k') bindkey -M vicmd ${key} history-substring-search-up
-for key ('j') bindkey -M vicmd ${key} history-substring-search-down
-unset key
+#for key ('^[[A' '^P' ${terminfo[kcuu1]}) bindkey -M vicmd ${key} history-search-backward
+#for key ('^[[B' '^N' ${terminfo[kcud1]}) bindkey -M vicmd ${key} history-search-forward
+for key ('k') bindkey -M vicmd ${key} history-search-backward
+for key ('j') bindkey -M vicmd ${key} history-search-forward
+#unset key
 # }}} End configuration added by Zim install
 
 # Created by newuser for 5.9
@@ -181,3 +191,22 @@ alias ll='ls -atrl --color=auto'
 export PATH="$HOME/.local:$PATH"
 
 export QT_QPA_PLATFORM=xcb
+
+# Clash Verge Proxy Control
+proxy_on() {
+    export http_proxy="http://127.0.0.1:7897"
+    export https_proxy="http://127.0.0.1:7897"
+    export HTTP_PROXY="http://127.0.0.1:7897"
+    export HTTPS_PROXY="http://127.0.0.1:7897"
+    export ALL_PROXY="socks5://127.0.0.1:7897"
+    echo "Proxy is ON (Clash Verge)"
+}
+
+proxy_off() {
+    unset http_proxy
+    unset https_proxy
+    unset HTTP_PROXY
+    unset HTTPS_PROXY
+    unset ALL_PROXY
+    echo "Proxy is OFF"
+}
